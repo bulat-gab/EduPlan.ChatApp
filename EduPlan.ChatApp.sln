@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduPlan.ChatApp.Api", "src\EduPlan.ChatApp.Api\EduPlan.ChatApp.Api.csproj", "{17A8C3EE-2F9A-49B0-B280-AF3B465A6340}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduPlan.ChatApp.Infrastructure", "src\EduPlan.ChatApp.Infrastructure\EduPlan.ChatApp.Infrastructure.csproj", "{314AFE2C-363B-44F4-B042-B80C160F1EFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,12 +24,17 @@ Global
 		{17A8C3EE-2F9A-49B0-B280-AF3B465A6340}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17A8C3EE-2F9A-49B0-B280-AF3B465A6340}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17A8C3EE-2F9A-49B0-B280-AF3B465A6340}.Release|Any CPU.Build.0 = Release|Any CPU
+		{314AFE2C-363B-44F4-B042-B80C160F1EFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{314AFE2C-363B-44F4-B042-B80C160F1EFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{314AFE2C-363B-44F4-B042-B80C160F1EFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{314AFE2C-363B-44F4-B042-B80C160F1EFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{17A8C3EE-2F9A-49B0-B280-AF3B465A6340} = {8E448A88-7584-4865-B65E-5F6A2738243E}
+		{314AFE2C-363B-44F4-B042-B80C160F1EFE} = {8E448A88-7584-4865-B65E-5F6A2738243E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C2781DFC-56C1-40E6-8EB2-0674FECF942A}
