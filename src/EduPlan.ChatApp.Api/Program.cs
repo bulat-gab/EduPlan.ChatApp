@@ -29,7 +29,11 @@ try
         .WriteTo.Console()
         .ReadFrom.Configuration(context.Configuration));
 
-    services.AddDbContext<ChatAppDbContext>(options => options.UseInMemoryDatabase("TestDatabase"));
+    var connectionString = configuration.GetConnectionString("SqlServer");
+    services.AddDbContext<ChatAppDbContext>(options =>
+    {
+        options.UseSqlServer(connectionString, x => x.MigrationsAssembly("EduPlan.ChatApp.Infrastructure"));
+    });
 
     if (builder.Environment.IsDevelopment())
         services.AddDatabaseDeveloperPageExceptionFilter();
@@ -66,6 +70,13 @@ try
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+    }
+
+    // migrate any database changes on startup (includes initial db creation)
+    using (var scope = app.Services.CreateScope())
+    {
+        var dataContext = scope.ServiceProvider.GetRequiredService<ChatAppDbContext>();
+        dataContext.Database.Migrate();
     }
 
     app.UseHttpsRedirection();
