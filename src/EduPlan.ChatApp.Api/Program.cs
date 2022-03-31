@@ -1,101 +1,69 @@
-﻿using EduPlan.ChatApp.Api;
+﻿
 using EduPlan.ChatApp.Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
-var services = builder.Services;
-var configuration = builder.Configuration;
+namespace EduPlan.ChatApp.Api;
 
-// Initialize logging
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
-
-Log.Information("Starting up");
-
-try
+public class Program
 {
-    // Add services to the container.
-    services.AddControllers();
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen();
-
-    // Add serilog
-    builder.Host.UseSerilog((context, loggerConfiguration) => loggerConfiguration
-        .WriteTo.Console()
-        .ReadFrom.Configuration(context.Configuration));
-
-    var connectionString = configuration.GetConnectionString("SqlServer");
-    services.AddDbContext<ChatAppDbContext>(options =>
+    public async static Task Main(string[] args)
     {
-        options.UseSqlServer(connectionString, x => x.MigrationsAssembly("EduPlan.ChatApp.Infrastructure"));
-    });
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .CreateBootstrapLogger();
 
-    if (builder.Environment.IsDevelopment())
-        services.AddDatabaseDeveloperPageExceptionFilter();
-
-    services
-        .AddIdentity<ApplicationUser, ApplicationRole>()
-        .AddEntityFrameworkStores<ChatAppDbContext>()
-        .AddSignInManager();
-
-    services
-        .AddAuthentication(x =>
+        try
         {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddCookie(x =>
+            Log.Information("Starting Web Host");
+
+            var host = CreateHostBuilder(args).Build();
+            //MigrateDatabase(host);
+
+            await host.RunAsync();
+        }
+        catch (Exception ex)
         {
-            x.LoginPath = "api/v1/account/external-login";
-        })
-        .AddJwtBearerCustom(Constants.JwtSecret)
-        .AddGoogle(options =>
+            Log.Fatal(ex, "Host terminated unexpectedly");
+        }
+        finally
         {
-            options.ClientId = configuration["Authentication__Google__ClientId"];
-            options.ClientSecret = configuration["Authentication__Google__ClientSecret"];
-            options.SignInScheme = Microsoft.AspNetCore.Identity.IdentityConstants.ExternalScheme;
-        });
-
-    var app = builder.Build();
-
-    app.UseSerilogRequestLogging();
-
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
+            Log.CloseAndFlush();
+        }
     }
 
-    // migrate any database changes on startup (includes initial db creation)
-    using (var scope = app.Services.CreateScope())
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+        .UseSerilog()
+        .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+
+    private static void MigrateDatabase(IHost host)
     {
-        var dataContext = scope.ServiceProvider.GetRequiredService<ChatAppDbContext>();
-        dataContext.Database.Migrate();
+        using (var scope = host.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            try
+            {
+                var context = services.GetRequiredService<ChatAppDbContext>();
+
+                if (context.Database.IsSqlServer())
+                {
+                    context.Database.Migrate();
+                }
+
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                //await ChatAppDbContext.SeedDefaultUserAsync(userManager, roleManager);
+                //await ChatAppDbContext.SeedSampleDataAsync(context);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred while migrating or seeding the database.");
+                throw;
+            }
+        }
     }
-
-    app.UseHttpsRedirection();
-    app.UseRouting();
-
-    app.UseAuthentication();
-    app.UseAuthorization();
-
-    app.MapControllers();
-
-    app.Run();
 }
-catch (Exception exception)
-{
-    Log.Fatal(exception, "Unhandled exception");
-}
-finally
-{
-    Log.Information("Shut down complete");
-    Log.CloseAndFlush();
-}
-
