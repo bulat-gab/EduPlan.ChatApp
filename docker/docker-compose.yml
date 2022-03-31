@@ -1,0 +1,15 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  db:
+    container_name: eduplan-sql2019
+    ports:
+      - "20031:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+
+volumes:
+  sqlvolume:
