@@ -12,8 +12,9 @@ public class Message : Entity<int, int>
 
     private Message() { }
 
-    public Message(int fromId, int toId, string text)
+    public Message(int chatId, int fromId, int toId, string text)
     {
+        this.ChatId = chatId;
         this.FromId = fromId;
         this.ToId = toId;
         this.Text = text;
