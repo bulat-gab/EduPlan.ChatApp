@@ -68,8 +68,11 @@ public class Startup
                 options.ClientSecret = Configuration["Authentication__Google__ClientSecret"];
                 options.SignInScheme = IdentityConstants.ExternalScheme;
             });
+
         services.AddScoped<IChatService, ChatService>();
         services.AddScoped<IChatRepository, ChatRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IMessageService, MessageService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
