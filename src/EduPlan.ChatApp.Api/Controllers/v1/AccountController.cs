@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using EduPlan.ChatApp.Infrastructure;
+using EduPlan.ChatApp.Domain;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -90,7 +90,7 @@ public class AccountController : ControllerBase
             logger.Information($"User {user.Email} signed in");
 
             //var jwtResult = await jwtAuthManager.GenerateTokens(user, claims, DateTime.UtcNow);
-            var accessToken = IssueJwt(email);
+            var accessToken = IssueJwt(user);
 
             //sucess
             await userManager.SetAuthenticationTokenAsync(
@@ -111,7 +111,7 @@ public class AccountController : ControllerBase
         return this.Forbid();
     }
 
-    private string IssueJwt(string email)
+    private string IssueJwt(ApplicationUser user)
     {
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.JwtSecret));
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -119,7 +119,9 @@ public class AccountController : ControllerBase
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Name, email)
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.UserName),
             }),
             Expires = DateTime.UtcNow.AddDays(1),
             Issuer = Constants.JwtIssuer,

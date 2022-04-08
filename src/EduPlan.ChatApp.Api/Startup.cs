@@ -1,4 +1,7 @@
-﻿using EduPlan.ChatApp.Infrastructure;
+﻿using EduPlan.ChatApp.Api.Services;
+using EduPlan.ChatApp.Domain;
+using EduPlan.ChatApp.Infrastructure;
+using EduPlan.ChatApp.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +67,7 @@ public class Startup
                 options.ClientSecret = Configuration["Authentication__Google__ClientSecret"];
                 options.SignInScheme = IdentityConstants.ExternalScheme;
             });
+        services.AddScoped<IChatService, ChatService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

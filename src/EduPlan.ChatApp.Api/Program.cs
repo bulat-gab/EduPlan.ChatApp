@@ -1,4 +1,5 @@
 ﻿
+using EduPlan.ChatApp.Domain;
 using EduPlan.ChatApp.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
