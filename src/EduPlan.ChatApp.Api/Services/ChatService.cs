@@ -1,4 +1,5 @@
 ﻿using EduPlan.ChatApp.Domain;
+using EduPlan.ChatApp.Infrastructure.Repositories;
 using Serilog;
 
 namespace EduPlan.ChatApp.Api.Services;
@@ -6,11 +7,26 @@ namespace EduPlan.ChatApp.Api.Services;
 public class ChatService : IChatService
 {
     private readonly Serilog.ILogger logger = Log.ForContext<ChatService>();
+    private readonly IChatRepository chatRepository;
 
-    public Task<Chat> Create(string currentUserId, int userId)
+    public ChatService(IChatRepository chatRepository)
     {
-        logger.Information($"Chat between {currentUserId} and {userId} has been created.");
+        this.chatRepository = chatRepository;
+    }
 
-        return Task.FromResult(new Chat());
+    public async Task<Chat> Create(int currentUserId, int userId)
+    {
+        try
+        {
+            var createdChat = await chatRepository.CreateOneToOneChat(currentUserId, userId);
+            logger.Information($"Chat between {currentUserId} and {userId} has been created.");
+
+            return createdChat;
+        }
+        catch (Exception exception)
+        {
+            logger.Error(exception, $"Failed to create a chat.");
+            return null;
+        }
     }
 }

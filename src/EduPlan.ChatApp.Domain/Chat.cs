@@ -9,8 +9,18 @@ public class Chat : Entity<int, int>
 
     public ChatType ChatType { get; set; }
 
+    private Chat()
+    {
+    }
+
+    public Chat(string name, ChatType chatType)
+    {
+        this.Name = name;
+        this.ChatType = chatType;
+    }
+
     /// <summary>
     /// EF Core navigation property
     /// </summary>
-    public IList<ChatParticipant> ChatParticipants { get; set; }
+    public ICollection<ChatParticipant> ChatParticipants { get; set; }
 }

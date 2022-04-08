@@ -9,5 +9,5 @@ public class ApplicationUser : IdentityUser<int>
     /// <summary>
     /// EF Core navigation property
     /// </summary>
-    public IList<ChatParticipant> ChatParticipants { get; set; }
+    public ICollection<ChatParticipant> ChatParticipants { get; set; }
 }

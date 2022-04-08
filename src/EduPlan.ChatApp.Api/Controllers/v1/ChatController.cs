@@ -29,9 +29,10 @@ public class ChatController : ControllerBase
 
         logger.Information($"Chat creation request from UserId: {currentUserId}, Email: {email} to {userId}");
 
-        var createdChat = await chatService.Create(currentUserId, userId);
+        var createdChat = await chatService.Create(int.Parse(currentUserId), userId);
+        if (createdChat != null)
+            return Ok();
 
-        return Ok();
+        return BadRequest();
     }
-
 }

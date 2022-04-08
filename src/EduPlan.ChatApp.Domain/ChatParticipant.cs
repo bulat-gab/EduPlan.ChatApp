@@ -11,4 +11,12 @@ public class ChatParticipant
 
     public int UserId { get; set; }
     public ApplicationUser User { get; set; }
+
+    public ChatParticipant() { }
+
+    public ChatParticipant(int chatId, int userId)
+    {
+        this.ChatId = chatId;
+        this.UserId = userId;
+    }
 }

@@ -41,6 +41,7 @@ public class Startup
         services.AddDbContext<ChatAppDbContext>(options =>
             {
                 options.UseSqlServer(connectionString, x => x.MigrationsAssembly("EduPlan.ChatApp.Infrastructure"));
+                options.EnableSensitiveDataLogging();
             });
 
         services.AddDatabaseDeveloperPageExceptionFilter();
@@ -68,6 +69,7 @@ public class Startup
                 options.SignInScheme = IdentityConstants.ExternalScheme;
             });
         services.AddScoped<IChatService, ChatService>();
+        services.AddScoped<IChatRepository, ChatRepository>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
