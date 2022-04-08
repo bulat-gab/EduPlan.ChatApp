@@ -25,25 +25,25 @@ public abstract class AbstractRepository<T> : IRepository<T> where T : class
         return await dbSet.FindAsync(id);
     }
 
-    public async Task<bool> CreateAsync(T entity)
+    public async Task<T> CreateAsync(T entity)
     {
         dbSet.Add(entity);
         await this.dbContext.SaveChangesAsync();
-        return true;
+        return entity;
     }
 
-    public async Task<bool> DeleteAsync(T entity)
+    public async Task<T> DeleteAsync(T entity)
     {
         dbSet.Remove(entity);
         await this.dbContext.SaveChangesAsync();
-        return true;
+        return entity;
     }
 
-    public async Task<bool> UpdateAsync(T entity)
+    public async Task<T> UpdateAsync(T entity)
     {
         dbSet.Update(entity);
         await this.dbContext.SaveChangesAsync();
-        return true;
+        return entity;
     }
 
     public virtual async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate)
