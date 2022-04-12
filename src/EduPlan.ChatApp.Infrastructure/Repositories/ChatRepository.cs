@@ -48,4 +48,15 @@ public class ChatRepository : AbstractRepository<Chat>, IChatRepository
 
         return Task.FromResult(chat);
     }
+
+    public async Task<IEnumerable<Chat>> GetChats(int userId)
+    {
+        List<Chat>? result = await dbSet
+            .Include(p => p.ChatParticipants)
+            .ThenInclude(p => p.User)
+            .Where(x => x.ChatParticipants.Any(cp => cp.UserId == userId))
+            .ToListAsync();
+
+        return result;
+    }
 }

@@ -1,13 +1,20 @@
-﻿using EduPlan.ChatApp.Domain;
+﻿using System.Runtime.Serialization;
+using EduPlan.ChatApp.Domain;
 
 namespace EduPlan.ChatApp.Api.Models;
 
+[DataContract(Name = "Chat")]
 public class ChatDTO
 {
-    //public ICollection<UserDTO> Users { get; set; }
-    public int User1 { get; set; }
+    public int Id { get; set; }
 
-    public int User2 { get; set; }
+    public UserDTO User1 { get; set; }
 
-    public List<Message> messages { get; set; }
+    public UserDTO User2 { get; set; }
+
+    public string Name { get; set; }
+
+    public ChatType Type { get; set; }
+
+    public List<Message> Messages { get; set; }
 }
