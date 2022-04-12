@@ -13,10 +13,12 @@ public class Chat : Entity<int, int>
     {
     }
 
-    public Chat(string name, ChatType chatType)
+    public Chat(string name, ChatType chatType, int createdBy)
     {
         this.Name = name;
         this.ChatType = chatType;
+        this.CreatedAt = DateTime.UtcNow;
+        this.CreatedBy = createdBy;
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
-﻿using EduPlan.ChatApp.Domain;
+﻿using EduPlan.ChatApp.Common.Exceptions;
+using EduPlan.ChatApp.Domain;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -15,38 +16,26 @@ public class ChatRepository : AbstractRepository<Chat>, IChatRepository
         users = context.Set<ApplicationUser>();
     }
 
-    public Task<Chat> CreateOneToOneChat(int userId1, int userId2)
+    public Task<Chat> CreateOneToOneChat(Chat chat)
     {
-        var chatUsers = users.Where(x => x.Id == userId1 || x.Id == userId2);
-
-        var chat = new Chat($"{userId1} -> {userId2}", ChatType.Private);
-
-        dbContext.Add(chat);
-        dbContext.SaveChanges();
-
-        logger.Information($"Chat with id: {chat.Id} has been created.");
-
-        var user1 = users.Single(x => x.Id == userId1);
-        var user2 = users.Single(x => x.Id == userId2);
-
-        var chatParticipant1 = new ChatParticipant
+        try
         {
-            Chat = chat,
-            User = user1,
-        };
-        var chatParticipant2 = new ChatParticipant
+            dbContext.Add(chat);
+            dbContext.SaveChanges();
+
+            logger.Information($"Chat with id: {chat.Id} has been created.");
+
+            return Task.FromResult(chat);
+        }
+        catch (DbUpdateException exception) when (exception.InnerException != null)
         {
-            Chat = chat,
-            User = user2,
-        };
+            if (exception.InnerException.Message.Contains("FK_ChatParticipant_AspNetUsers_UserId"))
+            {
+                throw new ChatAppUserDoesNotExistException("User does not exist");
+            }
 
-        chat.ChatParticipants = new List<ChatParticipant>();
-        chat.ChatParticipants.Add(chatParticipant1);
-        chat.ChatParticipants.Add(chatParticipant2);
-
-        dbContext.SaveChanges();
-
-        return Task.FromResult(chat);
+            throw;
+        }
     }
 
     public async Task<IEnumerable<Chat>> GetChats(int userId)

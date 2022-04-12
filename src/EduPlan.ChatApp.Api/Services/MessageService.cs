@@ -1,5 +1,5 @@
-﻿using EduPlan.ChatApp.Api.Exceptions;
-using EduPlan.ChatApp.Api.Models;
+﻿using EduPlan.ChatApp.Api.Models;
+using EduPlan.ChatApp.Common.Exceptions;
 using EduPlan.ChatApp.Domain;
 using EduPlan.ChatApp.Infrastructure.Repositories;
 using Serilog;

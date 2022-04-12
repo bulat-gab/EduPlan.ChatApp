@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using EduPlan.ChatApp.Api.Models;
 using EduPlan.ChatApp.Api.Services;
+using EduPlan.ChatApp.Common.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -31,11 +32,17 @@ public class ChatController : ControllerBase
 
         logger.Information($"Chat creation request from UserId: {currentUserId}, Email: {email} to {userId}");
 
-        var createdChat = await chatService.Create(currentUserId, userId);
-        if (createdChat != null)
-            return Ok();
+        try
+        {
+            var createdChat = await chatService.Create(currentUserId, userId);
 
-        return BadRequest();
+            return Ok();
+        }
+        catch (ChatAppUserDoesNotExistException)
+        {
+            logger.Error($"UserId: {userId} does not exist");
+            return BadRequest();
+        }
     }
 
     [HttpGet]

@@ -17,18 +17,25 @@ public class ChatService : IChatService
 
     public async Task<Chat> Create(int currentUserId, int userId)
     {
-        try
-        {
-            var createdChat = await chatRepository.CreateOneToOneChat(currentUserId, userId);
-            logger.Information($"Chat between {currentUserId} and {userId} has been created.");
+        var chat = new Chat($"{currentUserId} -> {userId}", ChatType.Private, currentUserId);
 
-            return createdChat;
-        }
-        catch (Exception exception)
+        var chatParticipant1 = new ChatParticipant
         {
-            logger.Error(exception, $"Failed to create a chat.");
-            return null;
-        }
+            Chat = chat,
+            UserId = currentUserId,
+        };
+        var chatParticipant2 = new ChatParticipant
+        {
+            Chat = chat,
+            UserId = userId,
+        };
+
+        chat.ChatParticipants = new List<ChatParticipant> { chatParticipant1, chatParticipant2 };
+
+        var createdChat = await chatRepository.CreateOneToOneChat(chat);
+        logger.Information($"Chat between {currentUserId} and {userId} has been created.");
+
+        return createdChat;
     }
 
     public async Task<IEnumerable<ChatDTO>> GetAll(int userId)
