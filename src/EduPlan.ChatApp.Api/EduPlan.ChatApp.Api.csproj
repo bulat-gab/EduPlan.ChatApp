@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EduPlan.ChatApp.Common\EduPlan.ChatApp.Common.csproj" />
     <ProjectReference Include="..\EduPlan.ChatApp.Infrastructure\EduPlan.ChatApp.Infrastructure.csproj" />
   </ItemGroup>
 

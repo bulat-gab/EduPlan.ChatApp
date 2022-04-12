@@ -1,4 +1,4 @@
-﻿namespace EduPlan.ChatApp.Api.Exceptions;
+﻿namespace EduPlan.ChatApp.Common.Exceptions;
 
 public class ChatAppException : Exception
 {
