@@ -37,6 +37,31 @@ public class MessageService : IMessageService
         }
     }
 
+    public async Task<IEnumerable<MessageDTO>> Get(int chatId, int userId)
+    {
+        try
+        {
+            var messages = await messageRepository.GetMessagesForChatId(chatId);
+            logger.Information($"Found {messages.Count()} messages. ChatId: {chatId}");
+
+            return messages.Select(x => new MessageDTO
+            {
+                ChatId = chatId,
+                FromId = x.FromId,
+                ToId = x.ToId,
+                Text = x.Text,
+                CreatedAt = x.CreatedAt,
+            });
+
+        }
+        catch (Exception exception)
+        {
+            string errorMessage = $"Failed to get the messages for chatId {chatId}";
+            this.logger.Error(exception, errorMessage);
+            throw new ChatAppException(errorMessage, exception);
+        }
+    }
+
     public async Task<IEnumerable<ChatDTO>> GetChats(int userId)
     {
         try

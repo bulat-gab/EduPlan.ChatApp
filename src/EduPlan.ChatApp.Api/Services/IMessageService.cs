@@ -5,7 +5,7 @@ namespace EduPlan.ChatApp.Api.Services;
 
 public interface IMessageService
 {
-    Task<IEnumerable<ChatDTO>> GetChats(int userId);
+    Task<IEnumerable<MessageDTO>> Get(int chatId, int userId);
 
     Task Create(MessageDTO message);
 }
