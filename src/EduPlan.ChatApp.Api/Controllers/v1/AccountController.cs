@@ -123,7 +123,7 @@ public class AccountController : ControllerBase
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.UserName),
             }),
-            Expires = DateTime.UtcNow.AddDays(1),
+            Expires = DateTime.UtcNow.AddDays(30),
             Issuer = Constants.JwtIssuer,
             Audience = Constants.JwtAudience,
             SigningCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature),
