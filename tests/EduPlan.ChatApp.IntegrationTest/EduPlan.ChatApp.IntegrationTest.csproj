@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="Moq" Version="4.17.2" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\EduPlan.ChatApp.Api\EduPlan.ChatApp.Api.csproj" />
+    <ProjectReference Include="..\..\src\EduPlan.ChatApp.Domain\EduPlan.ChatApp.Domain.csproj" />
+    <ProjectReference Include="..\..\src\EduPlan.ChatApp.Infrastructure\EduPlan.ChatApp.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

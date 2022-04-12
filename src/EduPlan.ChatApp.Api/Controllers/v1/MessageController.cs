@@ -1,8 +1,7 @@
 ﻿using System.Security.Claims;
-using EduPlan.ChatApp.Api.Exceptions;
 using EduPlan.ChatApp.Api.Models;
 using EduPlan.ChatApp.Api.Services;
-using EduPlan.ChatApp.Infrastructure.Repositories;
+using EduPlan.ChatApp.Common.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
