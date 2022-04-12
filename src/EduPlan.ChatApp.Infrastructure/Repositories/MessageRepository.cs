@@ -18,4 +18,11 @@ public class MessageRepository : AbstractRepository<Message>, IMessageRepository
 
         return await queryable.ToListAsync();
     }
+
+    public async Task<IEnumerable<Message>> GetMessagesForChatId(int chatId)
+    {
+        var query = this.dbSet.Where(x => x.ChatId == chatId).OrderByDescending(x => x.CreatedAt);
+
+        return await query.ToListAsync();
+    }
 }

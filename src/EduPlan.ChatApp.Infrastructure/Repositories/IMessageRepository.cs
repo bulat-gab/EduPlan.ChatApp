@@ -13,4 +13,6 @@ public interface IMessageRepository : IRepository<Message>
     /// </param>
     /// <returns></returns>
     Task<IEnumerable<Message>> GetMessagesForUserId(int userId, bool sorted = true);
+
+    Task<IEnumerable<Message>> GetMessagesForChatId(int chatId);
 }

@@ -14,4 +14,6 @@ public class MessageDTO
     [Required]
     [MaxLength(255)]
     public string Text { get; set; }
+
+    public DateTime CreatedAt { get; set; }
 }

@@ -12,6 +12,7 @@ namespace EduPlan.ChatApp.Api.Controllers.v1;
 [ApiController]
 [Authorize]
 [Route("api/v1/chat/{chatId:int}/message")]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class MessageController : ControllerBase
 {
     private readonly Serilog.ILogger logger = Log.ForContext<MessageController>();
@@ -26,11 +27,16 @@ public class MessageController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IEnumerable<ChatDTO>> Get(int fromUserId)
+    public async Task<IEnumerable<MessageDTO>> Get([FromRoute] int chatId)
     {
-        var chats = await messageService.GetChats(fromUserId);
+        var userId = GetCurrentUserId();
+        var email = GetEmail();
 
-        return chats;
+        logger.Information($"Get messages request from UserId: {userId}, Email: {email}");
+
+        var messages = await messageService.Get(chatId, userId);
+
+        return messages;
     }
 
     [HttpPost("")]
@@ -57,4 +63,12 @@ public class MessageController : ControllerBase
 
         return Ok();
     }
+
+    private int GetCurrentUserId()
+    {
+        string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return int.Parse(userId);
+    }
+
+    private string GetEmail() => this.User.FindFirstValue(ClaimTypes.Email);
 }
