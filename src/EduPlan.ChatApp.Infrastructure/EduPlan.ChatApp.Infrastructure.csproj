@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EduPlan.ChatApp.Common\EduPlan.ChatApp.Common.csproj" />
     <ProjectReference Include="..\EduPlan.ChatApp.Domain\EduPlan.ChatApp.Domain.csproj" />
   </ItemGroup>
 

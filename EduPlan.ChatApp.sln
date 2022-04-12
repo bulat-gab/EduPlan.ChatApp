@@ -14,7 +14,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduPlan.ChatApp.Api", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduPlan.ChatApp.Infrastructure", "src\EduPlan.ChatApp.Infrastructure\EduPlan.ChatApp.Infrastructure.csproj", "{314AFE2C-363B-44F4-B042-B80C160F1EFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduPlan.ChatApp.Domain", "src\EduPlan.ChatApp.Domain\EduPlan.ChatApp.Domain.csproj", "{412190F6-8B23-413B-95A0-9CDB2A4783C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduPlan.ChatApp.Domain", "src\EduPlan.ChatApp.Domain\EduPlan.ChatApp.Domain.csproj", "{412190F6-8B23-413B-95A0-9CDB2A4783C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4AB1BEDA-7137-4EA4-A6A5-8482F94EFE63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduPlan.ChatApp.IntegrationTest", "tests\EduPlan.ChatApp.IntegrationTest\EduPlan.ChatApp.IntegrationTest.csproj", "{4B92DE1B-48B6-452C-B85B-9F8E8D2E9A17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduPlan.ChatApp.Common", "src\EduPlan.ChatApp.Common\EduPlan.ChatApp.Common.csproj", "{65684673-B49C-4B35-8779-75E631A3D7D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +40,14 @@ Global
 		{412190F6-8B23-413B-95A0-9CDB2A4783C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{412190F6-8B23-413B-95A0-9CDB2A4783C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{412190F6-8B23-413B-95A0-9CDB2A4783C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B92DE1B-48B6-452C-B85B-9F8E8D2E9A17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B92DE1B-48B6-452C-B85B-9F8E8D2E9A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B92DE1B-48B6-452C-B85B-9F8E8D2E9A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B92DE1B-48B6-452C-B85B-9F8E8D2E9A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65684673-B49C-4B35-8779-75E631A3D7D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65684673-B49C-4B35-8779-75E631A3D7D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65684673-B49C-4B35-8779-75E631A3D7D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65684673-B49C-4B35-8779-75E631A3D7D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +56,8 @@ Global
 		{17A8C3EE-2F9A-49B0-B280-AF3B465A6340} = {8E448A88-7584-4865-B65E-5F6A2738243E}
 		{314AFE2C-363B-44F4-B042-B80C160F1EFE} = {8E448A88-7584-4865-B65E-5F6A2738243E}
 		{412190F6-8B23-413B-95A0-9CDB2A4783C6} = {8E448A88-7584-4865-B65E-5F6A2738243E}
+		{4B92DE1B-48B6-452C-B85B-9F8E8D2E9A17} = {4AB1BEDA-7137-4EA4-A6A5-8482F94EFE63}
+		{65684673-B49C-4B35-8779-75E631A3D7D4} = {8E448A88-7584-4865-B65E-5F6A2738243E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C2781DFC-56C1-40E6-8EB2-0674FECF942A}
