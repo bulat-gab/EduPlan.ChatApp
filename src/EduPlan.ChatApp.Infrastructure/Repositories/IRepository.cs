@@ -8,11 +8,11 @@ public interface IRepository<T> where T : class
 
     Task<T> GetById(int id);
 
-    Task<T> CreateAsync(T entity);
+    Task<T> Create(T entity);
 
-    Task<T> UpdateAsync(T entity);
+    Task<T> Update(T entity);
 
-    Task<T> DeleteAsync(T entity);
+    Task<T> Delete(T entity);
 
     Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate);
 }

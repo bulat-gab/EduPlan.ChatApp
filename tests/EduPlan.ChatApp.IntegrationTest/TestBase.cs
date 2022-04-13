@@ -1,5 +1,6 @@
 ﻿using EduPlan.ChatApp.Domain;
 using EduPlan.ChatApp.Infrastructure;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -8,6 +9,14 @@ namespace EduPlan.ChatApp.IntegrationTest;
 [TestFixture]
 public class TestBase
 {
+    private const string SqlServerAddress = "127.0.0.1";
+    private const string SqlServerPort = "20031";
+    private const string SqlServerDatabaseName = "chatapp_test";
+    private const string SqlServerUserId = "SA";
+    private const string SqlServerPassword = "Your_password123";
+
+    private const string ConnectionString = $"Server={SqlServerAddress},{SqlServerPort};Database={SqlServerDatabaseName};User Id={SqlServerUserId};Password={SqlServerPassword};MultipleActiveResultSets=true";
+
     protected ChatAppDbContext dbContext;
 
     protected DbSet<ApplicationUser> users;
@@ -20,13 +29,25 @@ public class TestBase
     public void SetUp()
     {
         var builder = new DbContextOptionsBuilder<ChatAppDbContext>()
-            .UseSqlServer("Server=127.0.0.1,20031;Database=chatapp_test;User Id=SA;Password=Your_password123;MultipleActiveResultSets=true",
+            .UseSqlServer(ConnectionString,
             x => x.MigrationsAssembly("EduPlan.ChatApp.Infrastructure"));
 
         DbContextOptions options = builder.Options;
 
         dbContext = new ChatAppDbContext(options);
-        dbContext.Database.Migrate();
+
+        try
+        {
+            dbContext.Database.Migrate();
+        }
+        catch(SqlException ex)
+        {
+            if (ex.Message.Contains("The server was not found or was not accessible"))
+            {
+                Assert.Fail($"Could not connect to the Database. " +
+                    $"Ensure SQL Server is running at {SqlServerAddress}:{SqlServerPort}.");
+            }
+        }
 
         users = dbContext.Set<ApplicationUser>();
         chats = dbContext.Set<Chat>();
@@ -77,7 +98,7 @@ public class TestBase
         return (user1, user2);
     }
 
-    protected ApplicationUser CreateUserInDatabase(string? name)
+    protected ApplicationUser CreateUserInDatabase(string? name = null)
     {
         string generatedName = name ?? Guid.NewGuid().ToString().Substring(10);
 
