@@ -23,7 +23,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Create([FromQuery] int userId)
     {
@@ -46,7 +46,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IEnumerable<ChatDTO>> Get()
     {
         var userId = GetCurrentUserId();
