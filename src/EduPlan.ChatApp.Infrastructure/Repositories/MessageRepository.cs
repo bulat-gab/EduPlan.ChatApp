@@ -1,4 +1,5 @@
-﻿using EduPlan.ChatApp.Domain;
+﻿using EduPlan.ChatApp.Common.Exceptions;
+using EduPlan.ChatApp.Domain;
 using EduPlan.ChatApp.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +23,38 @@ public class MessageRepository : AbstractRepository<Message>, IMessageRepository
     public async Task<IEnumerable<Message>> GetMessagesForChatId(int chatId)
     {
         var query = this.dbSet.Where(x => x.ChatId == chatId).OrderByDescending(x => x.CreatedAt);
+        var result = await query.ToListAsync();
 
-        return await query.ToListAsync();
+        return result;
+    }
+
+    public new async Task<Message> Create(Message entity)
+    {
+        try
+        {
+            dbSet.Add(entity);
+            await this.dbContext.SaveChangesAsync();
+        }
+        catch(DbUpdateException exception) when (exception.InnerException != null)
+        {
+            if (exception.InnerException.Message.Contains("FK_Message_AspNetUsers_FromId"))
+            {
+                throw new ChatAppUserDoesNotExistException($"User {entity.FromId} does not exist.");
+            }
+
+            if (exception.InnerException.Message.Contains("FK_Message_AspNetUsers_ToId"))
+            {
+                throw new ChatAppUserDoesNotExistException($"User {entity.FromId} does not exist.");
+            }
+
+            if (exception.InnerException.Message.Contains("FK_Message_Chat_ChatId"))
+            {
+                throw new ChatAppChatDoesNotExistException($"Chat between users {entity.FromId} and {entity.ToId} does not exist.");
+            }
+
+            throw;
+        }
+        
+        return entity;
     }
 }

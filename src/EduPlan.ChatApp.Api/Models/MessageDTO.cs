@@ -1,9 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace EduPlan.ChatApp.Api.Models;
 
+[DataContract(Name = "Message")]
 public class MessageDTO
 {
+    public int Id { get; set; }
+
     public int ChatId { get; set; }
 
     public int FromId { get; set; }

@@ -55,10 +55,11 @@ public class MessageController : ControllerBase
         {
             await messageService.Create(messageDTO);
         }
-        catch (ChatAppInvalidInputException exception)
+        catch(Exception exception) when (exception is ChatAppException)
         {
+            logger.Error(exception.Message);
             return BadRequest(exception.Message); // TODO: Create an error class with code and decsription
-        }
+        } 
 
         return Ok();
     }
