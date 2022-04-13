@@ -25,21 +25,21 @@ public abstract class AbstractRepository<T> : IRepository<T> where T : class
         return await dbSet.FindAsync(id);
     }
 
-    public async Task<T> CreateAsync(T entity)
+    public async Task<T> Create(T entity)
     {
         dbSet.Add(entity);
         await this.dbContext.SaveChangesAsync();
         return entity;
     }
 
-    public async Task<T> DeleteAsync(T entity)
+    public async Task<T> Delete(T entity)
     {
         dbSet.Remove(entity);
         await this.dbContext.SaveChangesAsync();
         return entity;
     }
 
-    public async Task<T> UpdateAsync(T entity)
+    public async Task<T> Update(T entity)
     {
         dbSet.Update(entity);
         await this.dbContext.SaveChangesAsync();
