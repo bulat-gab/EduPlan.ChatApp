@@ -7,5 +7,5 @@ public interface IMessageService
 {
     Task<IEnumerable<MessageDTO>> Get(int chatId, int userId);
 
-    Task Create(MessageDTO message);
+    Task<MessageDTO> Create(MessageDTO message);
 }

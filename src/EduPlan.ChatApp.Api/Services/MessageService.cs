@@ -16,7 +16,7 @@ public class MessageService : IMessageService
         this.messageRepository = messageRepository;
     }
 
-    public async Task Create(MessageDTO messageDTO)
+    public async Task<MessageDTO> Create(MessageDTO messageDTO)
     {
         if (messageDTO.FromId == messageDTO.ToId)
         {
@@ -24,17 +24,18 @@ public class MessageService : IMessageService
             throw new ChatAppInvalidInputException($"Cannot send messages to yourself. UserId: {messageDTO.FromId}");
         }
 
-        try
+        var message = new Message(messageDTO.ChatId, messageDTO.FromId, messageDTO.ToId, messageDTO.Text);
+        var result = await messageRepository.Create(message);
+
+        return new MessageDTO
         {
-            // TODO: Ensure recipient exists
-            var message = new Message(messageDTO.ChatId, messageDTO.FromId, messageDTO.ToId, messageDTO.Text);
-            var result = await messageRepository.CreateAsync(message);
-        }
-        catch (Exception exception)
-        {
-            logger.Error(exception, "Message creation failed");
-            throw new ChatAppException("Message creation failed", exception);
-        }
+            Id = message.Id,
+            ChatId = message.ChatId,
+            FromId = message.FromId,
+            ToId = message.ToId,
+            Text = result.Text,
+            CreatedAt = result.CreatedAt,
+        };
     }
 
     public async Task<IEnumerable<MessageDTO>> Get(int chatId, int userId)
@@ -46,6 +47,7 @@ public class MessageService : IMessageService
 
             return messages.Select(x => new MessageDTO
             {
+                Id = x.Id,
                 ChatId = chatId,
                 FromId = x.FromId,
                 ToId = x.ToId,
