@@ -20,12 +20,6 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add services to the container.
-        services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
-
         // Add serilog
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console()
@@ -69,10 +63,24 @@ public class Startup
                 options.SignInScheme = IdentityConstants.ExternalScheme;
             });
 
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyOrigin(); // TODO: Do not allow any origin for Production use
+            });
+        });
+
         services.AddScoped<IChatService, ChatService>();
         services.AddScoped<IChatRepository, ChatRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<IMessageService, MessageService>();
+
+        // Add services to the container.
+        services.AddControllers();
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -97,6 +105,11 @@ public class Startup
         app.UseRouting();
 
         app.UseAuthentication();
+
+        app.UseCors(cors => cors.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>
