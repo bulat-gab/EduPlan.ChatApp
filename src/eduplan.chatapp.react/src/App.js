@@ -1,25 +1,23 @@
-import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import './App.css';
 import { Button } from 'react-bootstrap';
+import NavMenu from './components/NavMenu';
+import Messages from "./components/Messages";
+import Home from "./components/Home";
+
+const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwiZW1haWwiOiJnYWJkcmFraG1hbm92LmJyQGdtYWlsLmNvbSIsIm5hbWUiOiJnYWJkcmFraG1hbm92LmJyQGdtYWlsLmNvbSIsIm5iZiI6MTY0OTkxODg0MSwiZXhwIjoxNjUyNTEwODQxLCJpYXQiOjE2NDk5MTg4NDEsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUxMTEiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MTExIn0.ra4zljByYAETKMnPkY9mvopDfmbzYGfgt6yflhFGR94";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <Button>Hello, Click me!</Button>
+      <h1>Chat App</h1>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />}/>
+          <Route path="/messages" element={<Messages token={jwt} />}/>
+        </Routes>
+      </Router>
+      
     </div>
   );
 }
