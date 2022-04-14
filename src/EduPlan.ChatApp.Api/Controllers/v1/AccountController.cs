@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Encodings.Web;
 using EduPlan.ChatApp.Domain;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
@@ -99,13 +100,7 @@ public class AccountController : ControllerBase
                 "AccessToken",
                 accessToken);
 
-            var response = new
-            {
-                accessToken,
-                tokenType = "bearer",
-                email,
-            };
-            return Ok(response);
+            return Redirect($"{returnUrl}?access_token={accessToken}");
         }
 
         return this.Forbid();
