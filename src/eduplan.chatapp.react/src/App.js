@@ -1,23 +1,42 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Button } from 'react-bootstrap';
-import NavMenu from './components/NavMenu';
-import Messages from "./components/Messages";
-import Home from "./components/Home";
+import Messages from './components/Messages';
+import LoginMenu from './components/auth/LoginMenu';
+import { Container, Row, Button } from 'react-bootstrap';
+import AuthService from './services/auth.service';
 
-const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwiZW1haWwiOiJnYWJkcmFraG1hbm92LmJyQGdtYWlsLmNvbSIsIm5hbWUiOiJnYWJkcmFraG1hbm92LmJyQGdtYWlsLmNvbSIsIm5iZiI6MTY0OTkxODg0MSwiZXhwIjoxNjUyNTEwODQxLCJpYXQiOjE2NDk5MTg4NDEsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUxMTEiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MTExIn0.ra4zljByYAETKMnPkY9mvopDfmbzYGfgt6yflhFGR94";
+const App = () => {
+  const [user, setUser] = useState(null);
 
-function App() {
+  useEffect(() => {
+    const signedUser = AuthService.getUser();
+    if (signedUser !== null) {
+      setUser(signedUser);
+    }
+
+  }, [])
+
+  const handleUserLogin = (accessToken) => {
+    const result = AuthService.signin(accessToken);
+    console.log(`Authentication result: ${result}`);
+
+    const signedUser = AuthService.getUser();
+    if (!signedUser) {
+      setUser(signedUser);
+    }
+  }
+
+  const handleSignout = () => {
+    console.log(`${user.name} has signed out.`);
+    AuthService.signout();
+    setUser(null);
+  }
+
   return (
-    <div className="App">
+    <div className='App'>
       <h1>Chat App</h1>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />}/>
-          <Route path="/messages" element={<Messages token={jwt} />}/>
-        </Routes>
-      </Router>
-      
+      <Button onClick={handleSignout}>Signout</Button>
+      {user ? <Messages /> : <LoginMenu onUserLogin={handleUserLogin}/>}
     </div>
   );
 }

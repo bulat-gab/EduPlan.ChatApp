@@ -1,8 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from 'react-bootstrap';
-import { ApplicationPaths } from './ApiAuthorizationConstants';
+import { ApplicationPaths, QueryParameterNames, WEB_HOST } from './ApiAuthorizationConstants';
 
-export function LoginMenu() {
+const getQueryVariable = (variable) => {
+  var query = window.location.search.substring(1);
+  var vars = query.split('&');
+  for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+      if (decodeURIComponent(pair[0]) == variable) {
+          return decodeURIComponent(pair[1]);
+      }
+  }
+  console.log('Query variable %s not found', variable);
+}
+
+const LoginMenu = (props) => {
+
+  useEffect(() => {
+    const url = window.location.href;
+    console.log('Url: ' + url);
+    const accessToken = getQueryVariable(QueryParameterNames.AccessToken);
+    if (accessToken != null){
+      props.onUserLogin(accessToken);
+      
+      const redirectUrl = WEB_HOST;
+      window.location.replace(redirectUrl);
+    }
+    else{
+      console.log('token is empty.');
+    }
+    
+  },[])
+  
   return (
     <a href={ApplicationPaths.GoogleLogin}>
       <Button>
