@@ -1,25 +1,28 @@
 import React, { useEffect, useState  } from 'react';
-import { BackendApiAddress } from './auth/ApiAuthorizationConstants';
+import { API_HOST } from './auth/ApiAuthorizationConstants';
 import axios from "axios"
 import { ListGroup } from 'react-bootstrap';
+import AuthService from '../services/auth.service';
+import MessageItem from './MessageItem';
 
 const chatId = "1";
-const messagesUrl = `${BackendApiAddress}api/v1/chat/${chatId}/message`;
+const messagesUrl = `${API_HOST}api/v1/chat/${chatId}/message`;
 const toId = "2";
 
-function Messages(props) {
-  const token = props.token;
-  const headers = {
-    "Authorization": `bearer ${token}`,
-    "Access-Control-Allow-Origin": "*",
-  };
+const Messages = () => {
+  const [user, setUser] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [messageInput, setMessageInput] = useState("");
 
-  const [messages, setMessages] = useState();
-  
   useEffect(() => {
+    const signedUser = AuthService.getUser();
+    if (signedUser !== null) {
+      setUser(signedUser);
+    }
+
     async function getMessages() {
       const result = await axios.get(messagesUrl, {
-        headers: headers
+        headers: AuthService.authHeader()
       });
 
       setMessages(result.data);
@@ -27,51 +30,49 @@ function Messages(props) {
     getMessages();
   },[]);
 
-  console.log(messages);
-
-  const listMessages = messages != null ? messages.map((message) => {
-    let formattedDate = new Date(message.createdAt + "Z");
-    formattedDate = formattedDate.toLocaleString();
-    console.log(formattedDate);
-
-    return (
-      <ListGroup.Item
-      key={message.id}
-      variant={message.fromId == "1" ? "primary" : "success"}
-    >
-      Date: {formattedDate} <br/>
-      FromUserId: {message.fromId} <br/>
-      Text: {message.text}
-    </ListGroup.Item>
-    )
-  }) : "No messages";
-
-  const handlePostMessage = (event) => {
+  const handlePostMessage = (event) => { 
     event.preventDefault();
   
-    console.log(event.target.value);
+    // TODO: use await
     axios.post(messagesUrl, {
       toId: toId,
-      text: "How are you?"
-    },
-    {
-      headers: headers
+      text: messageInput
+    }, {
+      headers: AuthService.authHeader()
     })
   }
 
-  return (
-    <div>
-      <h2>Messages:</h2>
+  const handleMessageInputChange = (event) => {
+    event.preventDefault();
+    setMessageInput(event.target.value);
+  }
+
+  if (user !== null) {
+    return (
+      <div>
+      <h2>Hello, {user.name}</h2>
+      <h3>Messages:</h3>
       <ListGroup>
-        {listMessages}
+        {messages ? messages.map(m => <MessageItem message={m} key={m.id} />) : 'No messages'}
       </ListGroup>
       <form onSubmit={handlePostMessage}>
         <label>
           Type your message here:
-          <input type="text"/>
+          <input type="text" name="text" onChange={handleMessageInputChange}/>
         </label>
         <input type="submit"/>
       </form>
+    </div>
+    )
+  } else {
+    return <AnonymousView />
+  }
+}
+
+const AnonymousView = () => {
+  return (
+    <div>
+      <h1>Please signin to view this page</h1>
     </div>
   )
 }

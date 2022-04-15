@@ -1,10 +1,11 @@
 export const ApplicationName = 'Chat App';
-export const BackendApiAddress = 'https://localhost:5111/'
-export const FrontendApiAddress = 'http://localhost:3000/'
+export const API_HOST = 'https://localhost:5111/'
+export const WEB_HOST = 'http://localhost:3000/'
 
 export const QueryParameterNames = {
   ReturnUrl: 'returnUrl',
-  Provider: 'provider'
+  Provider: 'provider',
+  AccessToken: 'access_token',
 };
 
 export const LoginActions = {
@@ -16,6 +17,7 @@ export const Providers = {
   Google: 'Google',
 }
 
+
 export const ApplicationPaths = {
-  GoogleLogin: `${BackendApiAddress}${LoginActions.ExternalLogin}?provider=Google&returnUrl=${FrontendApiAddress}`
+  GoogleLogin: `${API_HOST}${LoginActions.ExternalLogin}?provider=Google&returnUrl=${WEB_HOST}${LoginActions.LoginCallback}`
 }
