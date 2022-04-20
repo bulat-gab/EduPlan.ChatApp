@@ -30,6 +30,11 @@ public class ChatController : ControllerBase
         var currentUserId = GetCurrentUserId();
         var email = GetEmail();
 
+        if (currentUserId == userId)
+        {
+            return BadRequest("You cannot create chat with yourself. userId parameter must not be equal to your user.");
+        }
+
         logger.Information($"Chat creation request from UserId: {currentUserId}, Email: {email} to {userId}");
 
         try
