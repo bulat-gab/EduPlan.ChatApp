@@ -70,32 +70,41 @@ public class AccountController : ControllerBase
         if (signInResult.Succeeded)
         {
             logger.Information("User {Email} logged in with {Provider} provider.", email, info.LoginProvider);
-            return Redirect(returnUrl);
+            var existingUser = await userManager.FindByEmailAsync(email);
+            var accessToken = IssueJwt(existingUser);
+
+            await userManager.SetAuthenticationTokenAsync(
+                existingUser,
+                info.LoginProvider,
+                "AccessToken",
+                accessToken);
+
+            return Redirect($"{returnUrl}?access_token={accessToken}");
         }
 
-        var user = new ApplicationUser
+        var newUser = new ApplicationUser
         {
             Email = email,
             UserName = email,
             CreatedAt = DateTime.UtcNow,
         };
-        IdentityResult identityResult = await userManager.CreateAsync(user);
+        IdentityResult identityResult = await userManager.CreateAsync(newUser);
         if (identityResult.Succeeded)
         {
-            logger.Information($"User {user.Email} has been created");
+            logger.Information($"User {newUser.Email} has been created");
 
-            await userManager.AddLoginAsync(user, info);
-            logger.Information($"User {user.Email} login added");
+            await userManager.AddLoginAsync(newUser, info);
+            logger.Information($"User {newUser.Email} login added");
 
-            await signInManager.SignInAsync(user, false);
-            logger.Information($"User {user.Email} signed in");
+            await signInManager.SignInAsync(newUser, false);
+            logger.Information($"User {newUser.Email} signed in");
 
             //var jwtResult = await jwtAuthManager.GenerateTokens(user, claims, DateTime.UtcNow);
-            var accessToken = IssueJwt(user);
+            var accessToken = IssueJwt(newUser);
 
             //sucess
             await userManager.SetAuthenticationTokenAsync(
-                user,
+                newUser,
                 info.LoginProvider,
                 "AccessToken",
                 accessToken);
