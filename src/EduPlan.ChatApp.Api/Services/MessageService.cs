@@ -42,7 +42,7 @@ public class MessageService : IMessageService
     {
         try
         {
-            var messages = await messageRepository.GetMessagesForChatId(chatId);
+            var messages = await messageRepository.GetMessagesForChatId(chatId, userId);
             logger.Information($"Found {messages.Count()} messages. ChatId: {chatId}");
 
             return messages.Select(x => new MessageDTO

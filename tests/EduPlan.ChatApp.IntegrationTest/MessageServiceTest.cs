@@ -163,4 +163,31 @@ public class MessageServiceTest : TestBase
 
         Assert.AreEqual(0, messageDTOs.Count());
     }
+
+    [Test]
+    public async Task Get_ShouldReturnEmpty_WhenUserDoesNotBelongToChat()
+    {
+        var user1 = base.CreateUserInDatabase();
+        var user2 = base.CreateUserInDatabase();
+        var userWithNoAccess = base.CreateUserInDatabase();
+        var chat = base.CreateOneToOneChat(user1, user2);
+
+        var message = new Message(chat.Id, user1.Id, user2.Id, "Hello");
+
+        dbContext.Add(message);
+        dbContext.SaveChanges();
+
+        var emptyMessageDTOs = await messageService.Get(chat.Id, userWithNoAccess.Id);
+        var messagesDTOs1 = await messageService.Get(chat.Id, user1.Id);
+        var messagesDTOs2 = await messageService.Get(chat.Id, user2.Id);
+
+        Assert.IsEmpty(emptyMessageDTOs);
+        Assert.IsNotEmpty(messagesDTOs1);
+        Assert.IsNotEmpty(messagesDTOs2);
+
+        var actualMessage1 = messagesDTOs1.Single();
+        var actualMessage2 = messagesDTOs2.Single();
+        
+        Assert.AreEqual(actualMessage1.Id, actualMessage2.Id);
+    }
 }
