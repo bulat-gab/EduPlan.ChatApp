@@ -28,7 +28,7 @@ const signin = (accessToken) => {
   return { status: AuthenticationResultStatus.Success };
 }
 
-const signout = () => {
+const logout = () => {
   localStorage.removeItem(UserKey);
 }
 
@@ -48,11 +48,17 @@ const authHeader = () => {
   }
 }
 
+const isAuthenticated = () => {
+  const user = JSON.parse(localStorage.getItem(UserKey));
+  return user !== null;
+}
+ 
 const AuthService = {
   signin,
-  signout,
+  logout,
   getUser,
   authHeader,
+  isAuthenticated,
 }
 
 export default AuthService;
