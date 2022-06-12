@@ -8,8 +8,10 @@ import Navbar from './components/Navbar';
 import LoginMenu from './components/auth/LoginMenu';
 import Home from './components/Home';
 import About from './components/About';
+import PrivateRoute from './components/auth/PrivateRoute';
 import { Container, Row, Button } from 'react-bootstrap';
 import AuthService from './services/auth.service';
+import Logout from './components/auth/Logout';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -34,7 +36,7 @@ const App = () => {
 
   const handleSignout = () => {
     console.log(`${user.name} has signed out.`);
-    AuthService.signout();
+    AuthService.logout();
     setUser(null);
   }
 
@@ -44,16 +46,18 @@ const App = () => {
       <BrowserRouter>
         <Navbar />
         <Routes>
+          <Route element={ <PrivateRoute /> } >
+            <Route path="/profile" element={ <Profile /> }/>
+            <Route path="/messages" element={ <Messages /> }/>
+            <Route path="/search" element={ <UserSearch /> }/>
+            <Route path="/logout" element={ <Logout /> }/>
+          </Route>
           <Route path="/" element={ <Home /> }/>
-          <Route path="/profile" element={ <Profile /> }/>
-          <Route path="/messages" element={ <Messages /> }/>
-          <Route path="/search" element={ <UserSearch /> }/>
           <Route path="/about" element={ <About /> }/>
+          <Route path="/login" element={ <LoginMenu onUserLogin={handleUserLogin} /> }/>
+          <Route path="/login-callback" element={ <LoginMenu onUserLogin={handleUserLogin} /> }/>
         </Routes>
       </BrowserRouter>
-
-      {/* {user && <Button onClick={handleSignout}>Signout</Button>}
-      {user ? <Messages /> : <LoginMenu onUserLogin={handleUserLogin}/>} */}
     </div>
   );
 }
