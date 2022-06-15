@@ -32,7 +32,10 @@ public class ChatController : ControllerBase
 
         if (currentUserId == userId)
         {
-            return BadRequest("You cannot create chat with yourself. userId parameter must not be equal to your user.");
+            return BadRequest(new
+            {
+                message = "You cannot create chat with yourself. userId parameter must not be equal to your user."
+            });
         }
 
         logger.Information($"Chat creation request from UserId: {currentUserId}, Email: {email} to {userId}");
@@ -41,12 +44,20 @@ public class ChatController : ControllerBase
         {
             var createdChat = await chatService.Create(currentUserId, userId);
 
-            return Ok();
+            return Ok(new
+            {
+                id = createdChat.Id,
+            });
         }
         catch (ChatAppUserDoesNotExistException)
         {
-            logger.Error($"UserId: {userId} does not exist");
-            return BadRequest();
+            string message = $"User {userId} does not exist.";
+            this.logger.Error(message);
+
+            return BadRequest(new
+            {
+                message = message
+            });
         }
     }
 
