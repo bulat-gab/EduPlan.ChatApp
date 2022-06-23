@@ -12,6 +12,7 @@ import PrivateRoute from './components/auth/PrivateRoute';
 import { Container, Row, Button } from 'react-bootstrap';
 import AuthService from './services/auth.service';
 import Logout from './components/auth/Logout';
+import ChatList from './components/ChatList';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -49,6 +50,7 @@ const App = () => {
           <Route element={ <PrivateRoute /> } >
             <Route path="/profile" element={ <Profile /> }/>
             <Route path="/messages" element={ <Messages /> }/>
+            <Route path="/chats" element={ <ChatList /> }/>
             <Route path="/search" element={ <UserSearch /> }/>
             <Route path="/logout" element={ <Logout /> }/>
           </Route>
