@@ -1,11 +1,10 @@
 import NavbarPrivate from './NavbarPrivate';
 import NavbarPublic from './NavbarPublic';
 import React from 'react'
-import AuthService from '../services/auth.service';
+import AuthService from '../../services/auth.service';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 
 export default function NavMenu() {
   const isAuthenticated = AuthService.isAuthenticated();  

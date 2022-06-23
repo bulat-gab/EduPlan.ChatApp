@@ -4,7 +4,7 @@ import './App.css';
 import Messages from './components/Messages';
 import Profile from './components/Profile';
 import UserSearch from './components/UserSearch';
-import NavMenu from './components/Navbar';
+import NavMenu from './components/navbar/Navbar';
 import LoginMenu from './components/auth/LoginMenu';
 import Home from './components/Home';
 import About from './components/About';
@@ -32,12 +32,6 @@ const App = () => {
     if (!signedUser) {
       setUser(signedUser);
     }
-  }
-
-  const handleSignout = () => {
-    console.log(`${user.name} has signed out.`);
-    AuthService.logout();
-    setUser(null);
   }
 
   return (
