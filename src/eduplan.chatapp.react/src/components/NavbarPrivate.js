@@ -1,27 +1,16 @@
 import { Link } from 'react-router-dom';
 import React from 'react'
+import Nav from 'react-bootstrap/Nav';
 
 export default function NavbarPrivate() {
   return (
-    <nav style={{ textAlign: "center", marginTop: "20px" }}>
-      <Link to="/">
-        Home
-      </Link>
-      <Link to="/profile" style={{ padding: "10px" }}>
-        Profile
-      </Link>
-      <Link to="/chats" style={{ padding: "10px" }}>
-        Chats
-      </Link>
-      <Link to="/search" style={{ padding: "10px" }}>
-        Search
-      </Link>
-      <Link to="/about" style={{ padding: "10px" }}>
-        About
-      </Link>
-      <Link to="/logout" style={{ padding: "10px" }}>
-        Logout
-      </Link>
-    </nav>
+    <>
+      <Nav.Link as={Link} to="/">Home</Nav.Link>
+      <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
+      <Nav.Link as={Link} to="/chats">Chats</Nav.Link>
+      <Nav.Link as={Link} to="/search">Search</Nav.Link>
+      <Nav.Link as={Link} to="/about">About</Nav.Link>
+      <Nav.Link as={Link} to="/logout">Logout</Nav.Link>
+    </>
   )
 }

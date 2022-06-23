@@ -4,12 +4,11 @@ import './App.css';
 import Messages from './components/Messages';
 import Profile from './components/Profile';
 import UserSearch from './components/UserSearch';
-import Navbar from './components/Navbar';
+import NavMenu from './components/Navbar';
 import LoginMenu from './components/auth/LoginMenu';
 import Home from './components/Home';
 import About from './components/About';
 import PrivateRoute from './components/auth/PrivateRoute';
-import { Container, Row, Button } from 'react-bootstrap';
 import AuthService from './services/auth.service';
 import Logout from './components/auth/Logout';
 import ChatList from './components/ChatList';
@@ -43,9 +42,8 @@ const App = () => {
 
   return (
     <div className='App'>
-      <h1>Chat App</h1>
       <BrowserRouter>
-        <Navbar />
+        <NavMenu />
         <Routes>
           <Route element={ <PrivateRoute /> } >
             <Route path="/profile" element={ <Profile /> }/>
