@@ -3,9 +3,12 @@ import { Form, Button } from 'react-bootstrap';
 import { API_HOST } from './auth/ApiAuthorizationConstants';
 import axios from "axios";
 import AuthService from '../services/auth.service';
+import { useNavigate } from "react-router-dom";
 
 export default function UserSearch() {
   const [searchInput, setSearchInput] = useState("");
+  const navigate = useNavigate();
+
 
   const handleSearchInput = event => {
     event.preventDefault();
@@ -20,8 +23,14 @@ export default function UserSearch() {
         `${API_HOST}api/v1/chat/?userId=${searchInput}`, {}, {
           headers: AuthService.authHeader()
         });
-      console.log(response);
+      console.log('Create chat: ', response);
       console.log(`Created chatId: ${response.data.id}`);
+
+      navigate("/messages", {
+        state: {
+          chat: response.data
+        }
+      })
 
     } catch (err) {
       console.log(err)

@@ -42,12 +42,9 @@ public class ChatController : ControllerBase
 
         try
         {
-            var createdChat = await chatService.Create(currentUserId, userId);
+            var chatDTO = await chatService.Create(currentUserId, userId);
 
-            return Ok(new
-            {
-                id = createdChat.Id,
-            });
+            return Ok(chatDTO);
         }
         catch (ChatAppUserDoesNotExistException)
         {

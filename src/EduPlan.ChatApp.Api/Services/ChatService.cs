@@ -15,7 +15,7 @@ public class ChatService : IChatService
         this.chatRepository = chatRepository;
     }
 
-    public async Task<Chat> Create(int currentUserId, int userId)
+    public async Task<ChatDTO> Create(int currentUserId, int userId)
     {
         var chat = new Chat($"{currentUserId} -> {userId}", ChatType.Private, currentUserId);
 
@@ -35,7 +35,31 @@ public class ChatService : IChatService
         var createdChat = await chatRepository.CreateOneToOneChat(chat);
         logger.Information($"Chat between {currentUserId} and {userId} has been created.");
 
-        return createdChat;
+
+        var chatDTO = new ChatDTO
+        {
+            Id = chat.Id,
+            Name = chat.Name,
+            Type = chat.ChatType
+        };
+
+        var user1 = chat.ChatParticipants.FirstOrDefault(x => x.UserId == currentUserId).User;
+        chatDTO.User1 = new UserDTO
+        {
+            Id = user1.Id,
+            Email = user1.Email,
+            Username = user1.Email,
+        };
+
+        var user2 = chat.ChatParticipants.FirstOrDefault(x => x.UserId != currentUserId).User;
+        chatDTO.User2 = new UserDTO
+        {
+            Id = user2.Id,
+            Email = user2.Email,
+            Username = user2.Email,
+        };
+
+        return chatDTO;
     }
 
     public async Task<IEnumerable<ChatDTO>> GetAll(int userId)

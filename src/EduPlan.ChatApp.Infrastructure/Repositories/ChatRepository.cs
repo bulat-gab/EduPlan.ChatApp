@@ -16,7 +16,7 @@ public class ChatRepository : AbstractRepository<Chat>, IChatRepository
         users = context.Set<ApplicationUser>();
     }
 
-    public Task<Chat> CreateOneToOneChat(Chat chat)
+    public async Task<Chat> CreateOneToOneChat(Chat chat)
     {
         try
         {
@@ -25,7 +25,13 @@ public class ChatRepository : AbstractRepository<Chat>, IChatRepository
 
             logger.Information($"Chat with id: {chat.Id} has been created.");
 
-            return Task.FromResult(chat);
+            var createdChat = await dbSet
+           .Include(p => p.ChatParticipants)
+           .ThenInclude(p => p.User)
+           .Where(c => c.Id == chat.Id)
+           .SingleOrDefaultAsync();
+
+            return createdChat;
         }
         catch (DbUpdateException exception) when (exception.InnerException != null)
         {
