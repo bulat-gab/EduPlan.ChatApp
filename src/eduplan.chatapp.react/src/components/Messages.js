@@ -61,6 +61,7 @@ const Messages = () => {
   const handlePostMessage = (event) => { 
     event.preventDefault();
     sendMessage();
+    setTimeout(getMessages, 1000);
   };
 
   const handleMessageInputChange = (event) => {
