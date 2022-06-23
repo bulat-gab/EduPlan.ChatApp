@@ -10,9 +10,6 @@ export default function NavbarPrivate() {
       <Link to="/profile" style={{ padding: "10px" }}>
         Profile
       </Link>
-      <Link to="/messages" style={{ padding: "10px" }}>
-        Messages
-      </Link>
       <Link to="/chats" style={{ padding: "10px" }}>
         Chats
       </Link>

@@ -1,18 +1,53 @@
 import React, { useEffect, useState  } from 'react';
 import { API_HOST } from './auth/ApiAuthorizationConstants';
-import axios from "axios"
+import axios from "axios";
 import { ListGroup } from 'react-bootstrap';
 import AuthService from '../services/auth.service';
+import UserService from '../services/user.service';
 import MessageItem from './MessageItem';
-
-const chatId = "1";
-const messagesUrl = `${API_HOST}api/v1/chat/${chatId}/message`;
-const toId = "2";
+import { useLocation } from 'react-router-dom';
 
 const Messages = () => {
   const [user, setUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
+
+  const location = useLocation();
+  const chat = location.state.chat;
+  const messagesUrl = `${API_HOST}api/v1/chat/${chat.id}/message`;
+
+  console.log("chatId:", chat.id);
+
+  const getMessages = async () => {
+    try {
+      const result = await axios.get(messagesUrl, {
+        headers: AuthService.authHeader()
+      });
+  
+      console.log("getMessages: ", result);
+
+      setMessages(result.data);
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
+
+  const sendMessage = async () => {
+    try {
+      const result = await axios.post(messagesUrl, {
+        toId: UserService.getChatPartnerId(chat, user.id),
+        text: messageInput
+      }, {
+        headers: AuthService.authHeader()
+      });
+  
+      console.log("sendMessage: ", result);
+    }
+    catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     const signedUser = AuthService.getUser();
@@ -20,27 +55,13 @@ const Messages = () => {
       setUser(signedUser);
     }
 
-    async function getMessages() {
-      const result = await axios.get(messagesUrl, {
-        headers: AuthService.authHeader()
-      });
-
-      setMessages(result.data);
-    }
     getMessages();
   },[]);
 
   const handlePostMessage = (event) => { 
     event.preventDefault();
-  
-    // TODO: use await
-    axios.post(messagesUrl, {
-      toId: toId,
-      text: messageInput
-    }, {
-      headers: AuthService.authHeader()
-    })
-  }
+    sendMessage();
+  };
 
   const handleMessageInputChange = (event) => {
     event.preventDefault();
