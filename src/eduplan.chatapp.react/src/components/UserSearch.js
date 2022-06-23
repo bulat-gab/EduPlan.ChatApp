@@ -20,14 +20,12 @@ export default function UserSearch() {
         `${API_HOST}api/v1/chat/?userId=${searchInput}`, {}, {
           headers: AuthService.authHeader()
         });
-      const data = JSON.parse(response.data);
-      console.log(`Created chatId: ${data.id}`);
+      console.log(response);
+      console.log(`Created chatId: ${response.data.id}`);
 
     } catch (err) {
       console.log(err)
     }
-
-    console.log(result);
   }
 
   return (
