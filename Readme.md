@@ -1,8 +1,9 @@
 This is study project
 
-# Create project in Google Cloud Provider (GCP)
+## Google OAuth
+To start using google authentication first create project in [Google Cloud Provider (GCP)](https://console.cloud.google.com/)
 
-## Get the credentials
+and get the credentials
 ![image](https://user-images.githubusercontent.com/14952031/177108480-650550da-a354-4f3b-8e95-28f0dc888532.png)
 
 
